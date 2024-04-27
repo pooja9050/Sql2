@@ -19,3 +19,20 @@ FROM scores s1
 INNER JOIN scores s2 ON s1.score <= s2.score
 GROUP BY s1.id, s1.score
 ORDER BY s1.score DESC;
+
+
+#626. Exchange Seats
+# Write your MySQL query statement below using Mod function
+SELECT (
+    CASE
+       WHEN MOD(id, 2) != 0 AND id != cnts THEN id+1
+       WHEN MOD(id,2) != 0 AND id = cnts THEN id
+       ELSE id -1
+    END
+) AS 'id', student FROM Seat, (SELECT COUNT(*) AS cnts FROM Seat) AS seat_counts
+Order by id;
+
+#Using Bitwise operator
+SELECT s1.id, COALESCE (s2.student , s1.student) AS student 
+FROM Seat s1 LEFT JOIN Seat s2 ON (s1.id + 1)^1-1 = s2.id 
+ORDER BY s1.id 
