@@ -36,3 +36,35 @@ Order by id;
 SELECT s1.id, COALESCE (s2.student , s1.student) AS student 
 FROM Seat s1 LEFT JOIN Seat s2 ON (s1.id + 1)^1-1 = s2.id 
 ORDER BY s1.id 
+
+
+#608. Tree Node
+# Write your MySQL query statement below
+SELECT id, (
+    CASE
+       WHEN p_id IS NULL THEN 'Root'
+       WHEN id NOT IN (SELECT p_id FROM Tree WHERE DISTINCT p_id IS NOT NULL) THEN 'Leaf'
+       ELSE 'Inner'
+    END) AS 'type' FROM Tree
+    Order BY id;
+
+#Alternative way Tree Node
+SELECT t1.id,
+       CASE
+           WHEN t1.p_id IS NULL THEN 'Root'
+           WHEN t2.id IS NOT NULL THEN 'Inner'
+           ELSE 'Leaf'
+       END AS type
+FROM Tree t1
+LEFT JOIN Tree t2 ON t1.id = t2.p_id
+GROUP BY t1.id, t1.p_id
+
+#Alternative approach for Tree Node
+SELECT id,(
+    CASE
+       WHEN p_id IS NULL THEN 'Root'
+       WHEN id IN (SELECT p_id FROM Tree WHERE p_id IS NOT NULL) THEN 'Inner'
+       ELSE 'Leaf'
+    END
+) AS 'type' FROM Tree;
+
